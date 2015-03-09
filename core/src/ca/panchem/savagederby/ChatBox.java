@@ -1,5 +1,7 @@
 package ca.panchem.savagederby;
 
+import ca.panchem.savagederby.network.Message;
+
 import java.util.ArrayList;
 
 public class ChatBox {

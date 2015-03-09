@@ -6,6 +6,7 @@ import com.esotericsoftware.kryonet.EndPoint;
 import server.packets.MPlayer;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Network {
 
@@ -16,7 +17,6 @@ public class Network {
 
         kryo.register(Packet_Login.class);
         kryo.register(Packet_Login_Accepted.class);
-        kryo.register(PacketPlayerUpdate.class);
         kryo.register(Vector2.class);
         kryo.register(Packet_Player_List.class);
         kryo.register(ArrayList.class);
@@ -25,6 +25,12 @@ public class Network {
         kryo.register(Packet_Update_X.class);
         kryo.register(Packet_Update_Y.class);
         kryo.register(Packet_Broadcast.class);
+        kryo.register(Packet_Static_Data.class);
+        kryo.register(Packet_Static_Pack.class);
+        kryo.register(Packet_Ping.class);
+        kryo.register(StaticData.class);
+        kryo.register(HashMap.class);
+        kryo.register(server.packets.MPlayer[].class);
     }
 
     public static class Packet_Login {
@@ -35,7 +41,8 @@ public class Network {
         public int id;
     }
     public static class Packet_Player_List {
-        public ArrayList<MPlayer> players = new ArrayList<MPlayer>();
+        //public ArrayList<MPlayer> players = new ArrayList<MPlayer>();
+        public MPlayer[] players;
     }
     public static class Packet_Kick {
         public String reason;
@@ -49,11 +56,24 @@ public class Network {
         public int y;
         public int id;
     }
-    public static class PacketPlayerUpdate {
-        public Vector2 pos;
-        public int id;
-    }
     public static class Packet_Broadcast {
         public String message;
+    }
+    public static class Packet_Static_Data {
+        public int id;
+        public String name;
+        public String playerType;
+    }
+    public static class Packet_Static_Pack {
+        public HashMap<Integer, StaticData> staticDataPack;
+    }
+
+    public static class StaticData {
+        public String name;
+        public String playerType;
+
+    }
+
+    public static class Packet_Ping {
     }
 }

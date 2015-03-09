@@ -6,12 +6,11 @@ public class MPlayer {
 
     private Vector2 pos;
     private int id;
-    private String name;
+
 
     public MPlayer(Vector2 pos, int id, String name) {
         this.pos = pos;
         this.id = id;
-        this.name = name;
     }
 
     public MPlayer() {
@@ -39,13 +38,5 @@ public class MPlayer {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 }

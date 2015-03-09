@@ -1,4 +1,4 @@
-package ca.panchem.savagederby;
+package ca.panchem.savagederby.network;
 
 public class Message {
     public String message;
