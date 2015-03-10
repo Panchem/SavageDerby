@@ -8,24 +8,19 @@ import server.packets.MPlayer;
 public class Player extends MPlayer {
 
     private String playerType;
+
     public ResourceLoader res;
+    private long lastJumpTime;
+    private long jumpTime;
     boolean grounded;
-    boolean walking;
-    boolean jumping;
-    boolean crouching;
-    float charXVelocity = 0;
+    boolean ceilingd;
+    float charXVelocity = 10;
     float charYVelocity = 0;
     float gravityStrength = 12f;
-    private int direction = 1;
-    private int facing;
     private String name;
 
     public Player() {
         res = new ResourceLoader("assets/");
-    }
-
-    public String getPlayerType() {
-        return playerType;
     }
 
     public void setPlayerType(String playerType) {
@@ -40,66 +35,65 @@ public class Player extends MPlayer {
         float airMove = 0.4f;
         float playerAcceleration = 30f;
 
-        crouching = Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT);
+        setCrouching(Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT));
 
-        if(!grounded) {
-            charYVelocity -= gravityStrength;
-            charXVelocity *= airResistance;
-        } else if(crouching) {
-            charXVelocity *= crouchingFriction;
-        } else {
-            charYVelocity = 0;
-            if(!Gdx.input.isKeyPressed(Input.Keys.A) && !Gdx.input.isKeyPressed(Input.Keys.D))charXVelocity *= friction;
+        if(ceilingd) {
+            charYVelocity -= 10;
         }
 
-        if(Gdx.input.isKeyPressed(Input.Keys.SPACE) && grounded)  {
+        if (!grounded) {
+            charYVelocity -= gravityStrength;
+            charXVelocity *= airResistance;
+        } else if (isCrouching()) {
+            charXVelocity *= crouchingFriction;
+            charYVelocity = 0;
+        } else {
+            charYVelocity = 0;
+            if (!Gdx.input.isKeyPressed(Input.Keys.A) && !Gdx.input.isKeyPressed(Input.Keys.D))
+                charXVelocity *= friction;
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && grounded) {
             grounded = false;
-            jumping = true;
-            crouching = false;
+            setJumping(true);
+            lastJumpTime = System.currentTimeMillis();
+            setCrouching(false);
             charYVelocity = 1000;
         }
 
-        if(Gdx.input.isKeyPressed(Input.Keys.A) && grounded && !crouching && charXVelocity >= -moveSpeed) {
+        if (Gdx.input.isKeyPressed(Input.Keys.A) && grounded && !isCrouching() && charXVelocity >= -moveSpeed) {
             charXVelocity -= playerAcceleration;
-        } else if(Gdx.input.isKeyPressed(Input.Keys.A) && !crouching && charXVelocity >= -moveSpeed){
+        } else if (Gdx.input.isKeyPressed(Input.Keys.A) && !isCrouching() && charXVelocity >= -moveSpeed) {
             charXVelocity -= playerAcceleration * airMove;
         }
 
-        if(Gdx.input.isKeyPressed(Input.Keys.D) && grounded && !crouching && charXVelocity <= moveSpeed) {
+        if (Gdx.input.isKeyPressed(Input.Keys.D) && grounded && !isCrouching() && charXVelocity <= moveSpeed) {
             charXVelocity += playerAcceleration;
-        } else if (Gdx.input.isKeyPressed(Input.Keys.D) && !crouching && charXVelocity <= moveSpeed) {
+        } else if (Gdx.input.isKeyPressed(Input.Keys.D) && !isCrouching() && charXVelocity <= moveSpeed) {
             charXVelocity += playerAcceleration * airMove;
         }
 
         getPos().y += charYVelocity * Gdx.graphics.getDeltaTime();
         getPos().x += charXVelocity * Gdx.graphics.getDeltaTime();
 
-        if(charXVelocity < -1) {
-            facing = res.getSpriteWidth("stand");
-            direction = -1;
-            walking = charXVelocity < -200;
-        } else if(charXVelocity > 1) {
-            direction = 1;
-            facing = 0;
-            walking = charXVelocity > 200;
+        if (charXVelocity < -1) {
+            direction = false;
+            setWalking(charXVelocity < -200);
+        } else if (charXVelocity > 1) {
+            direction = true;
+            setWalking(charXVelocity > 200);
         } else {
             charXVelocity = 0;
-            walking = false;
+            setWalking(false);
         }
         res.updateAnims();
     }
 
-    public int getDirection() {
-        return direction;
-    }
-
-    public boolean isGrounded() {
-        return grounded;
-    }
-
     public void setGrounded(boolean grounded) {
         this.grounded = grounded;
-        jumping = false;
+        jumpTime = System.currentTimeMillis() - lastJumpTime;
+
+        if(jumpTime > 10) setJumping(false);
     }
 
     public float getXVelocity() {
@@ -110,21 +104,9 @@ public class Player extends MPlayer {
         return charYVelocity;
     }
 
-    public int getFacing() {
-        return facing;
-    }
-
-    public boolean isWalking() {
-        return walking;
-    }
-
-    public boolean isJumping() {
-        return jumping;
-    }
-
     public Vector2 getOPos() {
-        if(walking) return new Vector2(getPos().x - res.getAnimationWidth("walk") / 2, getPos().y - res.getAnimationHeight("walk") / 2);
-        if(jumping) return new Vector2(getPos().x - res.getSpriteWidth("jump") / 2, getPos().y - res.getSpriteHeight("jump") / 2);
+        if(isWalking()) return new Vector2(getPos().x - res.getAnimationWidth("walk") / 2, getPos().y - res.getAnimationHeight("walk") / 2);
+        if(isJumping()) return new Vector2(getPos().x - res.getSpriteWidth("jump") / 2, getPos().y - res.getSpriteHeight("jump") / 2);
         return new Vector2(getPos().x - res.getSpriteWidth("jump") / 2, getPos().y - res.getSpriteHeight("jump") / 2);
     }
 
@@ -136,7 +118,7 @@ public class Player extends MPlayer {
         this.name = name;
     }
 
-    public boolean isCrouching() {
-        return crouching;
+    public void setCeilingd(boolean ceilingd) {
+        this.ceilingd = ceilingd;
     }
 }

@@ -15,13 +15,9 @@ public class ResourceLoader {
     private String path;
 
     public ResourceLoader(String path) {
-        sprites = new HashMap<String, Texture>();
-        animations = new HashMap<String, AnimatedSprite>();
+        sprites = new HashMap<>();
+        animations = new HashMap<>();
         this.path = path;
-    }
-
-    public ResourceLoader() {
-        this("p1/");
     }
 
     public void load(String path, String key) {

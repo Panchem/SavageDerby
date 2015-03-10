@@ -27,10 +27,12 @@ public class Network {
         kryo.register(Packet_Broadcast.class);
         kryo.register(Packet_Static_Data.class);
         kryo.register(Packet_Static_Pack.class);
+        kryo.register(Packet_Player_Update.class);
+        kryo.register(Packet_Player_Update[].class);
+        kryo.register(Packet_Anim.class);
         kryo.register(Packet_Ping.class);
         kryo.register(StaticData.class);
         kryo.register(HashMap.class);
-        kryo.register(server.packets.MPlayer[].class);
     }
 
     public static class Packet_Login {
@@ -41,19 +43,18 @@ public class Network {
         public int id;
     }
     public static class Packet_Player_List {
-        //public ArrayList<MPlayer> players = new ArrayList<MPlayer>();
-        public MPlayer[] players;
+        public Packet_Player_Update[] players;
     }
     public static class Packet_Kick {
         public String reason;
         public int id;
     }
     public static class Packet_Update_X {
-        public int x;
+        public float x;
         public int id;
     }
     public static class Packet_Update_Y {
-        public int y;
+        public float y;
         public int id;
     }
     public static class Packet_Broadcast {
@@ -67,13 +68,57 @@ public class Network {
     public static class Packet_Static_Pack {
         public HashMap<Integer, StaticData> staticDataPack;
     }
-
     public static class StaticData {
         public String name;
         public String playerType;
 
     }
-
     public static class Packet_Ping {
+    }
+    public static class Packet_Player_Update {
+        public boolean walking;
+        public boolean crouching;
+        public boolean jumping;
+        public boolean direction;
+        public float x;
+        public float y;
+        public int id;
+    }
+    
+    public static Packet_Player_Update slimPlayer(MPlayer player) throws NullPointerException{
+
+        Packet_Player_Update u = new Packet_Player_Update();
+
+        u.id = player.getId();
+        try {
+            u.x = player.getPos().x;
+            u.y =  player.getPos().y;
+            u.walking = player.isWalking();
+            u.jumping = player.isJumping();
+            u.crouching = player.isCrouching();
+            u.direction = player.getBDirection();
+        } catch (NullPointerException e) {
+            System.out.println("Player Loading...");
+        }
+        return u;
+    }
+
+    public static MPlayer expandPlayer(Packet_Player_Update u) {
+        MPlayer exp = new MPlayer();
+
+        exp.setId(u.id);
+        exp.setX(u.x);
+        exp.setY(u.y);
+        exp.setWalking(u.walking);
+        exp.setJumping(u.jumping);
+        exp.setCrouching(u.crouching);
+        exp.setDirection(u.direction);
+
+        return exp;
+    }
+
+    public static class Packet_Anim {
+        public int id;
+        public boolean direction, jumping, walking, crouching;
     }
 }

@@ -16,8 +16,8 @@ import java.util.ArrayList;
 public class NetworkManager {
 
     private ArrayList<MPlayer> players;
-    private int networkX;
-    private int networkY;
+    private float networkX;
+    private float networkY;
     public int id;
     public String name;
     int updateIndexer = 0;
@@ -29,7 +29,7 @@ public class NetworkManager {
     private int ping;
 
     public NetworkManager(Vector2 playerPos) {
-        players = new ArrayList<MPlayer>();
+        players = new ArrayList<>();
         staticData = new StaticDataHandler();
         client = new Client();
         client.start();
@@ -41,6 +41,7 @@ public class NetworkManager {
             }
 
             public void disconnected(Connection c) {
+                connected = false;
                 System.out.println("Server has closed");
                 SavageDerby.chatBox.addMessage("Server has closed");
             }
@@ -60,9 +61,9 @@ public class NetworkManager {
                     Network.Packet_Player_List packet = (Network.Packet_Player_List) o;
 
                     players.clear();
-                    for (MPlayer p : packet.players) {
-                        if(p.getId() != id) {
-                            players.add(p);
+                    for (Network.Packet_Player_Update p : packet.players) {
+                        if(p.id != id) {
+                            players.add(Network.expandPlayer(p));
                         }
                     }
 
@@ -78,7 +79,6 @@ public class NetworkManager {
                         staticData.addPlayer(((Network.Packet_Static_Data) o).id, ((Network.Packet_Static_Data) o).name, ((Network.Packet_Static_Data) o).playerType);
                     }
                 } else if(o instanceof Network.Packet_Static_Pack) {
-
                     staticData.setData(((Network.Packet_Static_Pack) o).staticDataPack);
                 } else if (o instanceof Network.Packet_Ping) {
                     ping = (int) (System.currentTimeMillis() - lastPing);
@@ -104,25 +104,36 @@ public class NetworkManager {
         client.sendTCP(loginRequest);
     }
 
-    public void update(Vector2 playerPos) {
+    public void update(MPlayer player) {
         if(updateIndexer % 2 == 0 && connected) {
-            if((int) playerPos.x != networkX) {
-                networkX = (int) playerPos.x;
+
+            //Send movement packets
+            if((int) player.getPos().x != networkX) {
+                networkX = player.getPos().x;
                 Network.Packet_Update_X packet = new Network.Packet_Update_X();
                 packet.id = id;
-                packet.x = (int) playerPos.x;
+                packet.x = player.getPos().x;
                 client.sendTCP(packet);
             }
 
-            if((int) playerPos.y != networkY) {
-                networkY = (int) playerPos.y;
+            if((int) player.getPos().y != networkY) {
+                networkY = player.getPos().y;
                 Network.Packet_Update_Y packet = new Network.Packet_Update_Y();
                 packet.id = id;
-                packet.y = (int) playerPos.y;
+                packet.y = player.getPos().y;
                 client.sendTCP(packet);
             }
 
-        } else if(updateIndexer == 10) {
+            //Send animation data
+            Network.Packet_Anim packet_anim = new Network.Packet_Anim();
+            packet_anim.id = id;
+            packet_anim.crouching = player.isCrouching();
+            packet_anim.direction = player.getBDirection();
+            packet_anim.jumping = player.isJumping();
+            packet_anim.walking = player.isWalking();
+            client.sendTCP(packet_anim);
+
+        } else if(updateIndexer == 225) {
             lastPing = System.currentTimeMillis();
             client.sendTCP(new Network.Packet_Ping());
             updateIndexer = 0;
@@ -140,6 +151,11 @@ public class NetworkManager {
 
     public boolean isConnected() {
         return connected;
+    }
+
+    public String getSPing() {
+        if(connected) return String.valueOf(ping);
+        else return "Not Connected";
     }
 
     public int getPing() {
