@@ -37,6 +37,7 @@ public class Network {
 
     public static class Packet_Login {
         public String name;
+        public int type;
     }
     public static class Packet_Login_Accepted {
         public Vector2 spawnPoint;
@@ -63,14 +64,14 @@ public class Network {
     public static class Packet_Static_Data {
         public int id;
         public String name;
-        public String playerType;
+        public int playerType;
     }
     public static class Packet_Static_Pack {
         public HashMap<Integer, StaticData> staticDataPack;
     }
     public static class StaticData {
         public String name;
-        public String playerType;
+        public int playerType;
 
     }
     public static class Packet_Ping {
@@ -103,7 +104,7 @@ public class Network {
         return u;
     }
 
-    public static MPlayer expandPlayer(Packet_Player_Update u) {
+    public static MPlayer expandPlayer(Packet_Player_Update u, int type) {
         MPlayer exp = new MPlayer();
 
         exp.setId(u.id);
@@ -113,6 +114,7 @@ public class Network {
         exp.setJumping(u.jumping);
         exp.setCrouching(u.crouching);
         exp.setDirection(u.direction);
+        exp.setPlayerType(type);
 
         return exp;
     }

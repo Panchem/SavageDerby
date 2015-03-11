@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 public class MPlayer {
 
     protected boolean direction = true;
+    protected int playerType;
     boolean walking;
     boolean jumping;
     boolean crouching;
@@ -79,5 +80,28 @@ public class MPlayer {
 
     public void setDirection(boolean direction) {
         this.direction = direction;
+    }
+
+    public int getPlayerType() {
+        return playerType;
+    }
+
+    public static class PlayerTypes {
+        public static final int GARY = 0;
+        public static final int STEVE = 1;
+        public static final int BILLY = 2;
+
+        public static String getTypeString(int i) {
+            switch (i) {
+                case 0: return "Gary";
+                case 1: return "Steve";
+                case 2: return "Billy";
+                default: return "NOT A REAL PLAYER";
+            }
+        }
+    }
+
+    public void setPlayerType(int playerType) {
+        this.playerType = playerType;
     }
 }

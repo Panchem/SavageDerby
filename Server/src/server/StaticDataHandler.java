@@ -11,28 +11,26 @@ public class StaticDataHandler {
     }
 
     public StaticDataHandler() {
-        data = new HashMap<Integer, Network.StaticData>();
+        data = new HashMap<>();
     }
 
     public String getName(int id) {
-        if(data.get(id) == null) return "billy bob joe";
+        if(data.get(id) == null) return "Loading...";
         return data.get(id).name;
     }
 
-    public String getType(int id) {
-        return "type";
-        //return data.get(id).playerType;
+    public int getType(int id) {
+        try {
+            return data.get(id).playerType;
+        } catch (NullPointerException e) {
+            return 0;
+        }
     }
 
-    public void addPlayer(int id, String name, String playerType) {
+    public void addPlayer(int id, String name, int playerType) {
         Network.StaticData newPlayer = new Network.StaticData();
         newPlayer.name = name;
         newPlayer.playerType = playerType;
         data.put(id ,newPlayer);
-    }
-
-    public void addPlayer(Object o) {
-        Network.Packet_Static_Data playerData = (Network.Packet_Static_Data) o;
-        this.addPlayer(playerData.id, playerData.name, playerData.playerType);
     }
 }

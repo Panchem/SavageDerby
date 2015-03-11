@@ -40,12 +40,12 @@ public class SDServer {
 
                     MPlayer player = new MPlayer();
                     player.setId(c.getID());
-                    player.setPos(new Vector2(350, 350));
+                    player.setPos(new Vector2(1500, 850));
 
                     ch.print("Spawning player " + c.getID() + ", " + packet.name + " at " + player.getPos().x + ", " + player.getPos().y);
 
                     players.add(player);
-                    staticData.addPlayer(c.getID(), packet.name, "playerOne");
+                    staticData.addPlayer(c.getID(), packet.name, packet.type);
 
                     Network.Packet_Login_Accepted response = new Network.Packet_Login_Accepted();
                     response.id = player.getId();
@@ -172,7 +172,7 @@ public class SDServer {
             case "stop"         : running = false;
                                   System.exit(0);
                                   break;
-            case "default"      : commandHandler.unknownCommand();
+            default             : commandHandler.unknownCommand();
         }
     }
 
@@ -205,7 +205,7 @@ public class SDServer {
         public void printPlayers() {
             if(players.size() > 0) {
                 for (MPlayer p : players) {
-                    ch.print(staticData.getName(p.getId()) + " : " + p.getId());
+                    ch.print(staticData.getName(p.getId()) + " : " + p.getId() + " <> " + MPlayer.PlayerTypes.getTypeString(p.getPlayerType()));
                 }
             } else {
                 ch.print("No players connected");
@@ -220,12 +220,21 @@ public class SDServer {
             } catch (ArrayIndexOutOfBoundsException e) {
                 p.reason = "generic reasons.";
             }
-            p.id = Integer.parseInt(commands[1]);
+
+            try {
+                p.id = Integer.parseInt(commands[1]);
+            } catch (ArrayIndexOutOfBoundsException e) {
+                ch.print("That player is not connected");
+            }
             server.sendToAllTCP(p);
         }
 
         public void setNetworkDelay() {
-            network_delay = Integer.parseInt(commands[1]);
+            try {
+                network_delay = Integer.parseInt(commands[1]);
+            } catch (NumberFormatException e) {
+                ch.print("That was not a number");
+            }
             broadcast("network delay: " + (1000/network_delay) + " updates/s");
         }
 

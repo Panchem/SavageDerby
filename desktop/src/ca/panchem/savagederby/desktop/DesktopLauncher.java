@@ -1,8 +1,8 @@
 package ca.panchem.savagederby.desktop;
 
+import ca.panchem.savagederby.SavageDerby;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import ca.panchem.savagederby.SavageDerby;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {

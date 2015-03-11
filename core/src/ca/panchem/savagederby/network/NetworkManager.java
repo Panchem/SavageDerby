@@ -1,6 +1,6 @@
 package ca.panchem.savagederby.network;
 
-import ca.panchem.savagederby.SavageDerby;
+import ca.panchem.savagederby.screens.GameClass;
 import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
@@ -43,7 +43,7 @@ public class NetworkManager {
             public void disconnected(Connection c) {
                 connected = false;
                 System.out.println("Server has closed");
-                SavageDerby.chatBox.addMessage("Server has closed");
+                GameClass.chatBox.addMessage("Server has closed");
             }
 
             public void received(Connection c, Object o) {
@@ -55,7 +55,7 @@ public class NetworkManager {
                     connected = true;
 
                     System.out.println("Connection Accepted");
-                    SavageDerby.chatBox.addMessage("Connected to server.");
+                    GameClass.chatBox.addMessage("Connected to server.");
 
                 } else if (o instanceof Network.Packet_Player_List && !busy) {
                     Network.Packet_Player_List packet = (Network.Packet_Player_List) o;
@@ -63,7 +63,7 @@ public class NetworkManager {
                     players.clear();
                     for (Network.Packet_Player_Update p : packet.players) {
                         if(p.id != id) {
-                            players.add(Network.expandPlayer(p));
+                            players.add(Network.expandPlayer(p, staticData.getType(p.id)));
                         }
                     }
 
@@ -73,7 +73,7 @@ public class NetworkManager {
                         JOptionPane.showMessageDialog(null, "You have been kicked: " + ((Network.Packet_Kick) o).reason);
                     }
                 } else if(o instanceof Network.Packet_Broadcast) {
-                    SavageDerby.chatBox.addMessage(((Network.Packet_Broadcast) o).message);
+                    GameClass.chatBox.addMessage(((Network.Packet_Broadcast) o).message);
                 } else if(o instanceof Network.Packet_Static_Data) {
                     if(((Network.Packet_Static_Data) o).id != id) {
                         staticData.addPlayer(((Network.Packet_Static_Data) o).id, ((Network.Packet_Static_Data) o).name, ((Network.Packet_Static_Data) o).playerType);
@@ -98,9 +98,10 @@ public class NetworkManager {
         }
     }
 
-    public void login(String name) {
+    public void login(String name, int playerType) {
         Network.Packet_Login loginRequest = new Network.Packet_Login();
         loginRequest.name = name;
+        loginRequest.type = playerType;
         client.sendTCP(loginRequest);
     }
 
