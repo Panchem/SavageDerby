@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="60" height="45" tilewidth="70" tileheight="70" nextobjectid="82">
+ <tileset firstgid="1" name="tiles_spritesheet" tilewidth="70" tileheight="70" spacing="1">
+  <image source="tiles_spritesheet.png" width="852" height="856"/>
+ </tileset>
+ <tileset firstgid="145" name="tiles_spritesheet_castle" tilewidth="70" tileheight="70" spacing="2">
+  <image source="tiles_spritesheet_castle.png" width="914" height="936"/>
+ </tileset>
+ <tileset firstgid="301" name="castle_sheet" tilewidth="70" tileheight="70">
+  <image source="tilesheets/castle_sheet.png" width="512" height="512"/>
+ </tileset>
+ <layer name="BG" width="60" height="45">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3DAQkAAAwEoWv0/dutx1Bw1VRVVVVVVVVVVVV9+wBwpa1xMCoAAA==
+  </data>
+ </layer>
+ <layer name="Layer1" width="60" height="45">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+2WwUrDQBCGNzd7Frw2pNibFAqKRb0oCOJFRaj4AN7Fu4oXb30GX8Obj+as7eIy7pgm2UmT5f/hI10ypPmys5sMjDEDAABIhD4EvvCFL3zh283AF77wha/luWM8KvtWyThbIo21At/++74TTwJd8W0rqezP98TDGnVt+H7WMtCJhu8p9elVgAuF/p1WrNfwvRZ87yL62v51e9A6feyi1c/W+cgjput/2S05n8p+ZZMTOyU1KfmGMmbj2L5vgf/cwGv2J7n5O9+xfRfetQtituKw5N6GNXzqRMvXuu4RNzS5l8TIyM6FV1f2XJpGw9d33c/MB/ElOReBuqbOuZH3rZi+Mw/n4N693HmLufK6WOH7SUzfW4+DwPfGJFvWjVbPhI6vUl3VSOt/wcZt+p4Q54yp4Ov/DvU3n7fchHt4k751mAjrnntI6aOvWwPWeZt5SH08FOpi+vqc0X3OI3Cc/V7TrfsmaPkCALrDCwAJ8Q0+BPOMMCoAAA==
+  </data>
+ </layer>
+ <layer name="EXTRA" width="60" height="45">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3PsQ0AIBADsfx+dOzHrCxACUICu74iSQAAAADgX72SVrdXnPP6PwAAgJWxuQMAeMEEpLTvqTAqAAA=
+  </data>
+ </layer>
+ <objectgroup name="Collision">
+  <object id="5" name="collision" type="object" x="0" y="0" width="4200" height="350"/>
+  <object id="7" name="collision" type="object" x="0" y="350" width="630" height="2817.5"/>
+  <object id="8" name="collision" type="object" x="3500" y="350" width="700" height="2240"/>
+  <object id="63" name="collision" type="object" x="630.5" y="2636.5" width="3342.5" height="590"/>
+  <object id="69" name="collision" type="object" x="1959.67" y="2448.67">
+   <polygon points="0,0 0,-208.333 -140,-349.667 -280,-349.667 -490,-139 -559.333,-138.333 -838.667,-418.667 -979.667,-419 -1190.33,-208.667 -1333,-209 -1354.33,222 -1096.67,188.333 -1096.33,-184 -1028,-185.333 -1026.33,-255 -957,-255.333 -956.333,-324.333 -864.333,-324 -863.333,-256 -794.333,-254.667 -793.333,-186 -724.667,-185 -723.333,-45.6667 -396.333,-46 -396,-185 -326.667,-185.667 -326.333,-254.667 -256.667,-255 -255,-324.333 -164,-324 -163.334,-254.667 -94,-254.667 -94.6667,-185 -24.3333,-185 -22.6667,-0.333333"/>
+  </object>
+  <object id="70" name="collision" type="object" x="2146.33" y="2636">
+   <polygon points="0,0 -0.666667,-255.667 25.3333,-256.667 43,-236.333 50.3334,-229.333 59,-220.667 233.333,-46.3333 1353.33,-46 1353.33,3"/>
+  </object>
+  <object id="71" name="collision" type="object" x="2800" y="2380">
+   <polygon points="0,0 19.3333,55.3333 68,68 114.667,59.3333 136.667,3.33333"/>
+  </object>
+  <object id="72" name="collision" type="object" x="3079.33" y="2239.33">
+   <polygon points="0,0 -52,-14 -70.6667,-49.3333 -66.6667,-69.3333 68.6667,-68 69.3333,-33.3333 41.3333,-6.66667"/>
+  </object>
+  <object id="73" name="collision" type="object" x="3150" y="1962.67">
+   <polygon points="0,0 4,40 38.6667,61.3333 68.6667,65.3333 122.667,52.6667 140,20.6667 135.333,-1.33333"/>
+  </object>
+  <object id="74" name="collision" type="object" x="3006.67" y="1820">
+   <polygon points="0,0 3.33333,38 -28.6667,63.3333 -66.6667,69.3333 -118.667,56 -137.333,28 -135.333,1.33333"/>
+  </object>
+  <object id="75" name="collision" type="object" x="2520.67" y="1683.33">
+   <polygon points="0,0 2,37.3333 46,62.6667 218,66 270,46.6667 279.333,16.6667 276.667,-1.33333 4,-2"/>
+  </object>
+  <object id="76" name="collision" type="object" x="2800.67" y="1471.33">
+   <polygon points="0,0 0,33.3333 34,61.3333 70,68 121.333,56 140,26 138.667,-2"/>
+  </object>
+  <object id="77" name="collision" type="object" x="3010" y="1329.33">
+   <polygon points="0,0 0,24.6667 32.6667,49.3333 46.6667,70.6667 490,70.6667 492.667,0.666667"/>
+  </object>
+  <object id="78" name="collision" type="object" x="3220.67" y="1118.33">
+   <polygon points="0,0 -0.666667,24 -32.6667,46 -48,70 -2596,70 -2602,-0.666667"/>
+  </object>
+  <object id="79" name="collision" type="object" x="840" y="1609.33">
+   <polygon points="0,0 -13.3333,24.6667 -39.3333,31.3333 -46,57.3333 -70.6667,69.3333 -44.6667,85.3333 -38.6667,109.333 -12.6667,116.667 0,141.333 24,155.333 33.3333,178.667 57.3333,188 68,208.667 82,198.667 90.6667,207.333 106.667,198 116,207.333 128,198 140,209.333 150,198.667 159.333,206 173.333,199.333 184.667,209.333 200.667,198 209.333,208 220,198.667 232.667,209.333 246,199.333 256,208 268.667,197.333 278.667,208 296,186.667 316,178 324.667,154.667 350.667,140.667 364,118.667 388,108 396.667,82 420,69.3333 396,57.3333 386.667,30.6667 362,23.3333 348.667,0.666667"/>
+  </object>
+  <object id="80" name="collision" type="object" x="1400" y="1469.33">
+   <polygon points="0,0 0,23.3333 70.6667,70 139.333,23.3333 140,1.33333"/>
+  </object>
+  <object id="81" name="collision" type="object" x="1680" y="1400">
+   <polygon points="0,0 0.666667,21.3333 70,68.6667 140,19.3333 139.333,0.666667"/>
+  </object>
+ </objectgroup>
+</map>
